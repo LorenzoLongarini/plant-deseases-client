@@ -33,17 +33,20 @@ class _TasksWidgetState extends State<TasksWidget> {
                 width: 10,
               ),
               ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.amberAccent),
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.purple)),
-                  child: Text("Add"),
-                  onPressed: () {
-                    Provider.of<TodoProvider>(context, listen: false)
-                        .addTodo(newTaskController.text);
-                    newTaskController.clear();
-                  })
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.amberAccent),
+                    foregroundColor: MaterialStateProperty.all(Colors.purple)),
+                child: Text("Add"),
+                onPressed: () {
+                  Provider.of<TodoProvider>(context, listen: false)
+                      .addTodo(newTaskController.text)
+                      .then((value) =>
+                          Provider.of<TodoProvider>(context, listen: false)
+                              .getTodos);
+                  newTaskController.clear();
+                },
+              )
             ],
           ),
           FutureBuilder(

@@ -6,8 +6,8 @@ import 'package:plant_deseases_client/todo_item.dart';
 
 class TodoProvider with ChangeNotifier {
   List<TodoItem> _items = [];
-  // final url = 'http://localhost:5000/todo';
-  final url = 'http://10.0.2.2:5000/todo';
+  final url = 'http://localhost:5000/todo';
+  // final url = 'http://10.0.2.2:5000/todo';
 
   List<TodoItem> get items {
     return [..._items];
