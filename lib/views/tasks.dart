@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_deseases_client/todo_provider.dart';
+import 'package:plant_deseases_client/providers/todo_provider.dart';
 import 'package:provider/provider.dart';
 
 class TasksWidget extends StatefulWidget {

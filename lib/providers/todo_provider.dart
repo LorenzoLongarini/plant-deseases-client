@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:plant_deseases_client/todo_item.dart';
+import 'package:plant_deseases_client/models/todo_item.dart';
 
 class TodoProvider with ChangeNotifier {
   List<TodoItem> _items = [];
