@@ -13,15 +13,22 @@ class LlmProvider with ChangeNotifier {
     return [..._items];
   }
 
-  Future<void> addAnswer() async {
-    // Map<String, dynamic> request = {
-    //   "answer": "Scrivimi qualcosa di divertente",
-    // };
+  Future<void> addAnswer(String query) async {
+    if (query.isEmpty) {
+      return;
+    }
+    Map<String, dynamic> request = {
+      "query": query,
+    };
     final headers = {'Content-Type': 'application/json'};
-    final response = await http.post(Uri.parse(url), headers: headers);
-    // Map<String, dynamic> responsePayload = json.decode(response.body);
-    // final answ =
-    //     LlmItem(id: responsePayload["id"], answer: responsePayload["answer"]);
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: json.encode(request),
+    );
+    Map<String, dynamic> responsePayload = json.decode(response.body);
+    final answ =
+        LlmItem(id: responsePayload["id"], answer: responsePayload["answer"]);
   }
 
   Future<void> getAnswer() async {
@@ -41,6 +48,18 @@ class LlmProvider with ChangeNotifier {
       print(e);
     }
 
+    notifyListeners();
+  }
+
+  Future<void> deleteAnswer(int answerId) async {
+    var response;
+    try {
+      response = await http.delete(Uri.parse("$url/$answerId"));
+      final body = json.decode(response.body);
+      _items.removeWhere((element) => element.id == body["id"]);
+    } catch (e) {
+      print(e);
+    }
     notifyListeners();
   }
 }

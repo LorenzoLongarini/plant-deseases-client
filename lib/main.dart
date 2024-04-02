@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:plant_deseases_client/providers/llm_provider.dart';
-import 'package:plant_deseases_client/views/llm_view.dart';
-import 'package:plant_deseases_client/views/tasks.dart';
+import 'package:plant_deseases_client/src/llm_view.dart';
+import 'package:plant_deseases_client/src/navigation/router.dart';
+import 'package:plant_deseases_client/src/tasks.dart';
 import 'package:plant_deseases_client/providers/todo_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -16,35 +18,47 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
         value: LlmProvider(),
-        child: MaterialApp(
+        child: MaterialApp.router(
+          routerConfig: router,
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.purple,
           ),
-          home: const MyHomePage(title: 'Todo app'),
+          // home: const HomePage(title: ''),
         ));
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key, this.title});
+  final String? title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title ?? ''),
         centerTitle: true,
       ),
-      body: LlmView(),
+      body: Column(
+        children: [
+          TextButton(
+            onPressed: () => context.go('/llm'),
+            child: const Text('Llm'),
+          ),
+          TextButton(
+            onPressed: () => context.go('/login'),
+            child: const Text('Login'),
+          ),
+        ],
+      ),
     );
   }
 }

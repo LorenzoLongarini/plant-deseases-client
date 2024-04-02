@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:plant_deseases_client/providers/llm_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,33 +10,41 @@ class LlmView extends StatefulWidget {
 }
 
 class _LlmViewState extends State<LlmView> {
-  // late Future<void> loadDateFuture =
-  //     Provider.of<LlmProvider>(context, listen: false).getAnswer();
+  TextEditingController newQueryController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
           children: [
+            Expanded(
+              child: TextFormField(
+                controller: newQueryController,
+                decoration: const InputDecoration(
+                  labelText: 'Question',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
             ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Colors.amberAccent),
                   foregroundColor: MaterialStateProperty.all(Colors.purple)),
-              child: Text("Add"),
-              onPressed: () async {
-                await Provider.of<LlmProvider>(context, listen: false)
-                    .addAnswer()
+              child: const Text("Add"),
+              onPressed: () {
+                Provider.of<LlmProvider>(context, listen: false)
+                    .addAnswer(newQueryController.text)
                     .then(
                       (value) =>
                           Provider.of<LlmProvider>(context, listen: false)
                               .getAnswer(),
                     );
-
-                //     .then((value) {
-                // });
-                // Provider.of<LlmProvider>(context, listen: false)
-                //     .getAnswer());
+                newQueryController.clear();
               },
             )
           ],
@@ -63,25 +70,29 @@ class _LlmViewState extends State<LlmView> {
                         ? child as Widget
                         : Padding(
                             padding: const EdgeInsets.only(top: 20),
-                            child: Container(
+                            child: SizedBox(
                               height: MediaQuery.of(context).size.height * 0.6,
                               child: ListView.builder(
-                                  itemCount: llmProvider.items.length,
-                                  itemBuilder: (ctx, i) => Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 10.0),
-                                        child: ListTile(
-                                          tileColor: Colors.black12,
-                                          title: Text(
-                                            llmProvider.items[i].id.toString() +
-                                                llmProvider.items[i].answer,
-                                            style: TextStyle(
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
-                                          onTap: () {},
-                                        ),
-                                      )),
+                                itemCount: llmProvider.items.length,
+                                itemBuilder: (ctx, i) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                  child: ListTile(
+                                    tileColor: Colors.black12,
+                                    title: Text(
+                                        "${llmProvider.items[i].id}:${llmProvider.items[i].answer}"),
+                                    trailing: IconButton(
+                                        icon: const Icon(Icons.delete,
+                                            color: Colors.red),
+                                        onPressed: () {
+                                          Provider.of<LlmProvider>(context,
+                                                  listen: false)
+                                              .deleteAnswer(
+                                                  llmProvider.items[i].id);
+                                        }),
+                                    onTap: () {},
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                   );
