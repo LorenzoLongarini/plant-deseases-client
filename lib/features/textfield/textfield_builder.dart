@@ -51,7 +51,9 @@ class TextFieldBuilder extends StatelessWidget {
         obscureText: obscureText,
         onChanged: onChanged,
         decoration: InputDecoration(
+          floatingLabelStyle: TextStyle(color: Palette.primary),
           focusedBorder: border,
+          focusColor: Palette.primary,
           enabledBorder: border,
           labelText: labelText,
           prefixIcon: prefixIcon,

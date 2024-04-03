@@ -6,8 +6,8 @@ import 'package:plant_deseases_client/models/llm_item.dart';
 
 class LlmProvider with ChangeNotifier {
   List<LlmItem> _items = [];
-  final url = 'http://localhost:8080/llm';
-  // final url = 'http://10.0.2.2:5000/todo';
+  // final url = 'http://localhost:8080/llm';
+  final url = 'http://10.0.2.2:8080/llm';
 
   List<LlmItem> get items {
     return [..._items];
@@ -27,8 +27,8 @@ class LlmProvider with ChangeNotifier {
       body: json.encode(request),
     );
     Map<String, dynamic> responsePayload = json.decode(response.body);
-    final answ =
-        LlmItem(id: responsePayload["id"], answer: responsePayload["answer"]);
+    // final answ =
+    LlmItem(id: responsePayload["id"], answer: responsePayload["answer"]);
   }
 
   Future<void> getAnswer() async {
@@ -52,7 +52,7 @@ class LlmProvider with ChangeNotifier {
   }
 
   Future<void> deleteAnswer(int answerId) async {
-    var response;
+    dynamic response;
     try {
       response = await http.delete(Uri.parse("$url/$answerId"));
       final body = json.decode(response.body);

@@ -1,22 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:plant_deseases_client/features/buttons/google_button.dart';
-import 'package:plant_deseases_client/features/buttons/login_button.dart';
+import 'package:plant_deseases_client/features/buttons/generic_button.dart';
 import 'package:plant_deseases_client/features/textfield/email_textfield.dart';
-import 'package:plant_deseases_client/features/textfield/password_textfield.dart';
 import 'package:plant_deseases_client/style/palette.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class ResetPassword extends StatefulWidget {
+  const ResetPassword({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<ResetPassword> createState() => _ResetPasswordState();
 }
 
-class _LoginState extends State<Login> {
+class _ResetPasswordState extends State<ResetPassword> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
@@ -24,6 +20,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height / 3,
@@ -35,7 +32,7 @@ class _LoginState extends State<Login> {
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: const Text(
-                'Login',
+                'Password \nDimenticata',
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
@@ -46,10 +43,10 @@ class _LoginState extends State<Login> {
           EmailTexField(
             controller: emailController,
           ),
-          PasswordTextField(
-            controller: passwordController,
+          GenericButton(
+            title: 'Reset Password',
+            width: MediaQuery.of(context).size.width - 30,
           ),
-          const LoginButton(),
           const SizedBox(
             height: 15,
           ),
@@ -57,32 +54,23 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Password Dimenticata? ',
+                'Sei già registrato? ',
                 style: TextStyle(
                   fontSize: 10,
                 ),
               ),
               GestureDetector(
                 child: Text(
-                  'Resettela qui',
+                  'Effettua il Login',
                   style: TextStyle(
                       fontSize: 10,
                       color: Palette.primary,
                       fontWeight: FontWeight.bold),
                 ),
-                onTap: () => context.go('/reset'),
+                onTap: () => context.go('/login'),
               ),
             ],
           ),
-          Divider(
-            thickness: .3,
-            color: Palette.primary,
-          ),
-          const Text('OR'),
-          const SizedBox(
-            height: 15,
-          ),
-          const GoogleButton()
         ],
       ),
     );
