@@ -6,8 +6,8 @@ import 'package:plant_deseases_client/models/llm_item.dart';
 
 class LlmProvider with ChangeNotifier {
   List<LlmItem> _items = [];
-  // final url = 'http://localhost:8080/llm';
-  final url = 'http://10.0.2.2:8080/llm';
+  final url = 'http://localhost:8080/llm';
+  // final url = 'http://10.0.2.2:8080/llm';
 
   List<LlmItem> get items {
     return [..._items];

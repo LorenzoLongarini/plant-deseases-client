@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-plantdeseasesclient-dev-6a273-authRole",
+      "UnauthRoleArn": "arn:aws:iam::339713181019:role/amplify-plantdeseasesclient-dev-6a273-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::339713181019:role/amplify-plantdeseasesclient-dev-6a273-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-plantdeseasesclient-dev-6a273-deployment",
+      "UnauthRoleName": "amplify-plantdeseasesclient-dev-6a273-unauthRole",
+      "StackName": "amplify-plantdeseasesclient-dev-6a273",
+      "StackId": "arn:aws:cloudformation:eu-north-1:339713181019:stack/amplify-plantdeseasesclient-dev-6a273/5ce153a0-0096-11ef-922b-0630783db5cd",
+      "AmplifyAppId": "d5wy5g9v9xf4p"
+    },
+    "categories": {
+      "auth": {
+        "plantdeseasesclient1d25d883": {}
+      }
+    }
+  }
+}
