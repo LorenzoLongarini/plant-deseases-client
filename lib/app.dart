@@ -31,7 +31,7 @@ class App extends StatelessWidget {
           colorScheme:
               ColorScheme.fromSwatch(primarySwatch: colors.primaryColor)
                   .copyWith(
-            background: const Color(0xff82CFEA),
+            background: Colors.white,
           ),
         ),
       ),
@@ -65,14 +65,14 @@ class _MyHomePageState extends State<HomePage> {
               margin: const EdgeInsets.only(bottom: 10),
             ),
             GenericButton(
-              title: "Login",
+              title: "Signup",
               onPressed: () => context.go('/login'),
               margin: const EdgeInsets.only(bottom: 10),
             ),
-            GenericButton(
-              title: "Signup",
-              onPressed: () => context.go('/signup'),
-            ),
+            // GenericButton(
+            //   title: "Signup",
+            //   onPressed: () => context.go('/signup'),
+            // ),
           ],
         ),
       ),
