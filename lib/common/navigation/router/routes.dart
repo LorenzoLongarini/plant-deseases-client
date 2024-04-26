@@ -1,5 +1,9 @@
 enum AppRoute {
   home,
-  trip,
-  editTrip,
+  account,
+  chatbot,
+  favorites,
+  login,
+  confirm,
+  reset,
 }

@@ -2,6 +2,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:go_router/go_router.dart';
+import 'package:plant_deseases_client/common/navigation/router/routes.dart';
 
 class ConfirmScreen extends StatefulWidget {
   const ConfirmScreen({
@@ -15,7 +16,7 @@ class ConfirmScreen extends StatefulWidget {
 }
 
 class _ConfirmScreenState extends State<ConfirmScreen> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   bool _isEnabled = false;
 
   @override
@@ -34,18 +35,50 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
         username: data.name!,
         confirmationCode: code,
       );
-      print('1');
       if (res.isSignUpComplete) {
-        print('2');
-
         await Amplify.Auth.signIn(
             username: data.name!, password: data.password);
-        context.go(
-          '/llm',
+        context.goNamed(
+          AppRoute.home.name,
         );
       }
     } on AuthException catch (e) {
-      print(data.name! + code);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            e.message,
+            style: const TextStyle(fontSize: 15),
+          ),
+        ),
+      );
+      return null;
+    }
+  }
+
+  void _resendCode(BuildContext context, SignupData data) async {
+    try {
+      await Amplify.Auth.resendSignUpCode(username: data.name!);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.greenAccent,
+          content: Text(
+            'A confirmation code has been sent to ${data.name!}',
+            style: const TextStyle(fontSize: 15),
+          ),
+        ),
+      );
+    } on AuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            e.message,
+            style: const TextStyle(fontSize: 15),
+          ),
+        ),
+      );
+      return null;
     }
   }
 
@@ -109,7 +142,9 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                       ),
                     ),
                     MaterialButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _resendCode(context, widget.signupData);
+                      },
                       child: const Text(
                         'Resend code',
                         style: TextStyle(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_deseases_client/style/palette.dart';
+import 'package:plant_deseases_client/old/style/palette.dart';
 
 class TextFieldBuilder extends StatelessWidget {
   const TextFieldBuilder({

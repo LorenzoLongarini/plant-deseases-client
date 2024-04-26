@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_deseases_client/providers/llm_provider.dart';
+import 'package:plant_deseases_client/old/providers/llm_provider.dart';
 import 'package:provider/provider.dart';
 
 class LlmView extends StatefulWidget {

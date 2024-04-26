@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:plant_deseases_client/models/llm_item.dart';
+import 'package:plant_deseases_client/old/models/llm_item.dart';
 
 class LlmProvider with ChangeNotifier {
   List<LlmItem> _items = [];

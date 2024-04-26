@@ -1,9 +1,9 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:plant_deseases_client/common/navigation/router/routes.dart';
 
 class Login extends StatefulWidget {
   const Login({
@@ -16,6 +16,12 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   SignupData? _signupData;
+  bool _isSignedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Future<String> _onSignUp(BuildContext context, SignupData data) async {
     try {
@@ -33,33 +39,44 @@ class _LoginState extends State<Login> {
     } on AuthException catch (e) {
       return 'Error signing up: ${e.message}';
     }
-    // return 'There was a problem signing up. Please try again.';
   }
 
-  Future<String> _onLogin(BuildContext context, SignupData data) async {
+  Future<String> _onLogin(BuildContext context, LoginData data) async {
     try {
-      final result = await Amplify.Auth.signUp(
-        username: data.name!,
-        password: data.password!,
-        options: SignUpOptions(
-          userAttributes: {
-            AuthUserAttributeKey.email: data.name!,
-          },
-        ),
-      );
-      return 'Sign up result: $result';
+      final res = await Amplify.Auth.signIn(
+          username: data.name, password: data.password);
+      _isSignedIn = res.isSignedIn;
+      return '';
     } on AuthException catch (e) {
-      return 'Error signing up: ${e.message}';
+      return 'Error login: ${e.message}';
     }
+  }
+
+  Future<String> _onRecoverPassword(String email) async {
+    try {
+      final res = await Amplify.Auth.resetPassword(username: email);
+      if (res.nextStep.updateStep.name == 'confirmResetPasswordWithCode') {
+        context.goNamed(AppRoute.reset.name, extra: email);
+      }
+      return '';
+    } on AuthException catch (e) {
+      return 'Error reset password: ${e.message}';
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
+      key: widget.key,
       //TODO: centralize colors
       theme: LoginTheme(
         // logoWidth: 30,
-        beforeHeroFontSize: 32,
+        // beforeHeroFontSize: 32,
         primaryColor: const Color.fromRGBO(137, 207, 90, .5),
         accentColor: const Color.fromRGBO(255, 207, 68, .2),
         // headerMargin: 0.0,
@@ -83,12 +100,17 @@ class _LoginState extends State<Login> {
         ),
       ),
       // logo: AssetImage("assets/img/login.png"),
-      onLogin: (LoginData) {},
+      onLogin: (LoginData data) => _onLogin(context, data),
       onSignup: (SignupData data) => _onSignUp(context, data),
-      onSubmitAnimationCompleted: () =>
-          context.go('/login/confirm', extra: _signupData),
+      onSubmitAnimationCompleted: () {
+        _isSignedIn
+            ? context.goNamed(AppRoute.home.name)
+            : context.goNamed(AppRoute.confirm.name, extra: _signupData);
+      },
       // termsOfService: [TermOfService(id: '1', mandatory: true, text: 'prova')],
-      onRecoverPassword: (String) {},
+      onRecoverPassword: (String data) {
+        return _onRecoverPassword(data);
+      },
     );
   }
 }
