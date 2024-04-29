@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_deseases_client/old/textfield/textfield_builder.dart';
+import 'package:plant_deseases_client/common/ui/custom_widgets/textfield_builder.dart';
 import 'package:plant_deseases_client/old/style/palette.dart';
 
 class PasswordTextField extends StatefulWidget {

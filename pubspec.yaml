@@ -53,7 +53,6 @@ dependencies:
   uuid: ^4.4.0
   flutter_login: ^5.0.0
   flutter_dotenv: ^5.1.0
-  tflite_flutter: ^0.10.4
 
 dev_dependencies:
   amplify_lints: ^3.0.0

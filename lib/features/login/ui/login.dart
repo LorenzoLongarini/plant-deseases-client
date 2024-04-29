@@ -41,11 +41,35 @@ class _LoginState extends State<Login> {
     }
   }
 
+  // Future<void> login(LoginData data) async {
+  //   try {
+  //     final res = await Amplify.Auth.signIn(
+  //       username: data.name,
+  //       password: data.password,
+  //     );
+  //     _isSignedIn = res.isSignedIn;
+  //   } on AuthException catch (e) {
+  //     print(e);
+  //   }
+  // }
+
   Future<String> _onLogin(BuildContext context, LoginData data) async {
     try {
-      final res = await Amplify.Auth.signIn(
-          username: data.name, password: data.password);
-      _isSignedIn = res.isSignedIn;
+      final session = await Amplify.Auth.fetchAuthSession();
+      // SignInResult res;
+      if (session.isSignedIn) {
+        Amplify.Auth.signOut().then((value) async {
+          await Amplify.Auth.signIn(
+            username: data.name,
+            password: data.password,
+          );
+        });
+      } else {
+        await Amplify.Auth.signIn(
+          username: data.name,
+          password: data.password,
+        );
+      }
       return '';
     } on AuthException catch (e) {
       return 'Error login: ${e.message}';
@@ -102,8 +126,10 @@ class _LoginState extends State<Login> {
       // logo: AssetImage("assets/img/login.png"),
       onLogin: (LoginData data) => _onLogin(context, data),
       onSignup: (SignupData data) => _onSignUp(context, data),
-      onSubmitAnimationCompleted: () {
-        _isSignedIn
+      onSubmitAnimationCompleted: () async {
+        final session = await Amplify.Auth.fetchAuthSession();
+        // _isSignedIn
+        session.isSignedIn
             ? context.goNamed(AppRoute.home.name)
             : context.goNamed(AppRoute.confirm.name, extra: _signupData);
       },

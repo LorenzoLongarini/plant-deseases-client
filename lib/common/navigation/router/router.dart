@@ -23,8 +23,8 @@ final GoRouter router = GoRouter(
       // redirect: (context, state) async {
       //   //FIXME
       //   final user = await Amplify.Auth.fetchAuthSession();
-      //   if (!user.isSignedIn) {
-      //     return '/login';
+      //   if (user.isSignedIn) {
+      //     return '/base';
       //   } else {
       //     return null;
       //   }
@@ -59,22 +59,6 @@ final GoRouter router = GoRouter(
             return ResetPassword(email: email);
           },
         ),
-        // GoRoute(
-        //     path: 'login',
-        //     name: AppRoute.login.name,
-        //     builder: (BuildContext context, GoRouterState state) {
-        //       return const Login();
-        //     },
-        //     routes: <RouteBase>[
-        //       GoRoute(
-        //         path: 'confirm',
-        //         name: AppRoute.confirm.name,
-        //         builder: (BuildContext context, GoRouterState state) {
-        //           SignupData signupData = state.extra as SignupData;
-        //           return ConfirmScreen(signupData: signupData);
-        //         },
-        //       ),
-        //     ]),
       ],
     ),
   ],

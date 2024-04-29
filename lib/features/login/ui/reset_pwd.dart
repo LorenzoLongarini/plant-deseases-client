@@ -37,13 +37,16 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   void _resetPassword(
-      BuildContext context, String email, String password, String code) async {
+      {required String email,
+      required String password,
+      required String code}) async {
     try {
       final res = await Amplify.Auth.confirmResetPassword(
         username: email,
         newPassword: password,
         confirmationCode: code,
       );
+      context.goNamed(AppRoute.login.name);
     } on AuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -83,7 +86,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   children: [
                     TextField(
                       controller: _newPasswordController,
-                      obscureText: true,
+                      obscureText: _isObscured,
                       decoration: InputDecoration(
                         filled: true,
                         contentPadding:
@@ -128,10 +131,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                       onPressed: _isEnabled
                           ? () {
                               _resetPassword(
-                                context,
-                                widget.email,
-                                _controller.text,
-                                _newPasswordController.text,
+                                // context,
+                                email: widget.email,
+                                password: _newPasswordController.text,
+                                code: _controller.text,
                               );
                             }
                           : null,
