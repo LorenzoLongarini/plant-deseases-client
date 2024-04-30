@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_deseases_client/old/style/palette.dart';
+import 'package:plant_deseases_client/common/utils/colors.dart';
 
 class ButtonBuilder extends StatelessWidget {
   const ButtonBuilder({

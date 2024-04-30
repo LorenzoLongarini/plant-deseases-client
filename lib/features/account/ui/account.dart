@@ -2,12 +2,9 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:plant_deseases_client/app.dart';
 import 'package:plant_deseases_client/common/navigation/router/routes.dart';
 import 'package:plant_deseases_client/common/ui/custom_widgets/list_tile/list_tile.dart';
-import 'package:plant_deseases_client/features/account/utils/constants.dart';
 
 class Account extends StatefulWidget {
   const Account({super.key});
@@ -69,7 +66,6 @@ class _AccountState extends State<Account> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Column(
-                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           const CircleAvatar(
                             radius: 70,
@@ -107,7 +103,7 @@ class _AccountState extends State<Account> {
                             text: 'FAQs',
                           ),
                           const CustomListTile(
-                            icon: Icons.person,
+                            icon: Icons.info,
                             text: 'Info',
                           ),
                           MaterialButton(
@@ -118,36 +114,49 @@ class _AccountState extends State<Account> {
                                   'Logout',
                                   style: TextStyle(color: Colors.red),
                                 ),
-                                //   SizedBox(
-                                //     width: 20,
-                                //   ),
-                                //   Icon(
-                                //     Icons.logout,
-                                //     color: Colors.red,
-                                //   )
                               ],
                             ),
                             onPressed: () {
-                              Amplify.Auth.signOut()
-                                  .then(
-                                    (value) => {
-                                      context.goNamed(AppRoute.login.name),
-                                    },
-                                  )
-                                  .then((_) => false);
+                              showDialog(
+                                context: context,
+                                builder: (context) => CupertinoAlertDialog(
+                                  title: const Text(
+                                    'Sei sicuro di voler effettuare il logout?',
+                                  ),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: const Text(
+                                        'Si',
+                                        style:
+                                            TextStyle(color: Colors.redAccent),
+                                      ),
+                                      onPressed: () {
+                                        Amplify.Auth.signOut()
+                                            .then(
+                                              (value) => {
+                                                context.goNamed(
+                                                    AppRoute.login.name),
+                                              },
+                                            )
+                                            .then((_) => false);
+                                      },
+                                    ),
+                                    CupertinoDialogAction(
+                                      child: const Text(
+                                        'No',
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                    )
+                                  ],
+                                ),
+                              );
                             },
                           ),
                         ],
                       ),
                     ],
-                  )
-
-                  // Center(
-                  //   child: Text(
-                  //     _user == null ? 'Nessun Account trovato' : _user!.username,
-                  //   ),
-                  // ),
-                  );
+                  ));
         });
   }
 }

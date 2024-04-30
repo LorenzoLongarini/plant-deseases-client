@@ -10,8 +10,11 @@ class Chatbot extends StatefulWidget {
 class _ChatbotState extends State<Chatbot> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Chatbot'),
+    return Scaffold(
+                  appBar: AppBar(
+                    automaticallyImplyLeading: false,
+                    title: const Text('Account'),
+                    body: ),
     );
   }
 }

@@ -1,9 +1,12 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:plant_deseases_client/common/navigation/router/routes.dart';
+import 'package:plant_deseases_client/common/utils/colors.dart';
+import 'package:plant_deseases_client/common/utils/env_vars.dart';
 
 class Login extends StatefulWidget {
   const Login({
@@ -16,7 +19,6 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   SignupData? _signupData;
-  bool _isSignedIn = false;
 
   @override
   void initState() {
@@ -40,18 +42,6 @@ class _LoginState extends State<Login> {
       return 'Error signing up: ${e.message}';
     }
   }
-
-  // Future<void> login(LoginData data) async {
-  //   try {
-  //     final res = await Amplify.Auth.signIn(
-  //       username: data.name,
-  //       password: data.password,
-  //     );
-  //     _isSignedIn = res.isSignedIn;
-  //   } on AuthException catch (e) {
-  //     print(e);
-  //   }
-  // }
 
   Future<String> _onLogin(BuildContext context, LoginData data) async {
     try {
@@ -97,11 +87,12 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return FlutterLogin(
       key: widget.key,
-      //TODO: centralize colors
+      savedEmail: EnvVars.username,
+      savedPassword: EnvVars.password,
       theme: LoginTheme(
         // logoWidth: 30,
         // beforeHeroFontSize: 32,
-        primaryColor: const Color.fromRGBO(137, 207, 90, .5),
+        primaryColor: Palette.primary,
         accentColor: const Color.fromRGBO(255, 207, 68, .2),
         // headerMargin: 0.0,
         // cardInitialHeight: 600,
@@ -124,7 +115,9 @@ class _LoginState extends State<Login> {
         ),
       ),
       // logo: AssetImage("assets/img/login.png"),
-      onLogin: (LoginData data) => _onLogin(context, data),
+      onLogin: (LoginData data) {
+        return _onLogin(context, data);
+      },
       onSignup: (SignupData data) => _onSignUp(context, data),
       onSubmitAnimationCompleted: () async {
         final session = await Amplify.Auth.fetchAuthSession();

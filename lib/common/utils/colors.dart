@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 const Map<int, Color> primarySwatch = {
   50: Color.fromRGBO(255, 207, 68, .1),
@@ -12,6 +13,34 @@ const Map<int, Color> primarySwatch = {
   800: Color.fromRGBO(255, 207, 68, .9),
   900: Color.fromRGBO(255, 207, 68, 1),
 };
+
+class Palette {
+  static Color get primary =>
+      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+              Brightness.dark
+          ? const Color.fromARGB(255, 46, 100, 66)
+          : const Color.fromARGB(255, 46, 100, 66);
+  static Color get secundary =>
+      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+              Brightness.dark
+          ? const Color.fromARGB(255, 181, 121, 69)
+          : const Color.fromARGB(255, 181, 121, 69);
+  static Color get lighGreen =>
+      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+              Brightness.dark
+          ? const Color.fromARGB(255, 207, 214, 210)
+          : const Color.fromARGB(255, 207, 214, 210);
+  static Color get white =>
+      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+              Brightness.dark
+          ? Colors.white
+          : Colors.white;
+  static Color get deselected =>
+      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+              Brightness.dark
+          ? const Color.fromARGB(255, 215, 215, 215)
+          : const Color.fromARGB(255, 215, 215, 215);
+}
 
 // MaterialColor primarySwatch = const MaterialColor(
 //   0xFF2e6442,

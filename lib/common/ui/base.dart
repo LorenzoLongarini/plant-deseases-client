@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:plant_deseases_client/common/utils/colors.dart';
 import 'package:plant_deseases_client/features/account/ui/account.dart';
 import 'package:plant_deseases_client/features/chatbot/ui/chatbot.dart';
 import 'package:plant_deseases_client/features/favorites/ui/favorites.dart';
@@ -36,22 +38,25 @@ class _BaseState extends State<Base> {
         ),
         extendBody: false,
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromARGB(255, 178, 140, 125),
+          backgroundColor: Palette.primary,
           onPressed: () {},
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-          child: const Icon(Icons.photo_camera),
+          child: Icon(
+            Icons.document_scanner_outlined,
+            color: Palette.white,
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
+          elevation: 10,
+          shadowColor: Palette.primary,
+          surfaceTintColor: Palette.white,
+          color: Palette.white,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           height: 60,
-          color: const Color.fromARGB(255, 64, 120, 27), // FIXME
           notchMargin: 8,
-
           shape: const CircularNotchedRectangle(),
-          // exte
-          // extendBody: true,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,7 +64,8 @@ class _BaseState extends State<Base> {
               IconButton(
                 icon: Icon(
                   Icons.home,
-                  color: _currentPage == 0 ? Colors.white : Colors.black,
+                  color:
+                      _currentPage == 0 ? Palette.primary : Palette.deselected,
                 ),
                 onPressed: () {
                   setState(() {
@@ -71,7 +77,8 @@ class _BaseState extends State<Base> {
               IconButton(
                 icon: Icon(
                   Icons.favorite,
-                  color: _currentPage == 1 ? Colors.white : Colors.black,
+                  color:
+                      _currentPage == 1 ? Palette.primary : Palette.deselected,
                 ),
                 onPressed: () {
                   setState(() {
@@ -86,7 +93,8 @@ class _BaseState extends State<Base> {
               IconButton(
                 icon: Icon(
                   Icons.chat,
-                  color: _currentPage == 2 ? Colors.white : Colors.black,
+                  color:
+                      _currentPage == 2 ? Palette.primary : Palette.deselected,
                 ),
                 isSelected: true,
                 onPressed: () {
@@ -99,7 +107,8 @@ class _BaseState extends State<Base> {
               IconButton(
                 icon: Icon(
                   Icons.person,
-                  color: _currentPage == 3 ? Colors.white : Colors.black,
+                  color:
+                      _currentPage == 3 ? Palette.primary : Palette.deselected,
                 ),
                 onPressed: () {
                   setState(() {

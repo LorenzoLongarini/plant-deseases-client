@@ -6,11 +6,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plant_deseases_client/amplifyconfiguration.dart';
 import 'package:plant_deseases_client/app.dart';
 import 'package:plant_deseases_client/models/ModelProvider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await _configureAmplify();
+    await dotenv.load(fileName: ".env");
   } on AmplifyAlreadyConfiguredException {
     debugPrint('Amplify configuration failed.');
   }
