@@ -4,6 +4,4 @@ enum AppRoute {
   chatbot,
   favorites,
   login,
-  confirm,
-  reset,
 }

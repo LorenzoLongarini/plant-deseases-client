@@ -22,15 +22,19 @@ class _BaseState extends State<Base> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // resizeToAvoidBottomInset: false,
-
+        resizeToAvoidBottomInset: false,
         body: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           // height: MediaQuery.of(context).size.height - 200,
           child: PageView(
             // physics: constNeverScrollableScrollPhysics(),
             controller: _controller,
-            children: const [PlantsView(), Favorites(), Chatbot(), Account()],
+            children: const [
+              PlantsView(),
+              // Favorites(),
+              // Chatbot(),
+              Account(),
+            ],
             onPageChanged: (value) => setState(() {
               _currentPage = value;
             }),
@@ -59,7 +63,7 @@ class _BaseState extends State<Base> {
           shape: const CircularNotchedRectangle(),
           child: Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               IconButton(
                 icon: Icon(
@@ -74,45 +78,45 @@ class _BaseState extends State<Base> {
                   });
                 },
               ),
+              // IconButton(
+              //   icon: Icon(
+              //     Icons.favorite,
+              //     color:
+              //         _currentPage == 1 ? Palette.primary : Palette.deselected,
+              //   ),
+              //   onPressed: () {
+              //     setState(() {
+              //       _currentPage = 1;
+              //       _controller.jumpToPage(_currentPage);
+              //     });
+              //   },
+              // ),
+              const SizedBox(
+                width: 50,
+              ),
+              // IconButton(
+              //   icon: Icon(
+              //     Icons.chat,
+              //     color:
+              //         _currentPage == 2 ? Palette.primary : Palette.deselected,
+              //   ),
+              //   isSelected: true,
+              //   onPressed: () {
+              //     setState(() {
+              //       _currentPage = 2;
+              //       _controller.jumpToPage(_currentPage);
+              //     });
+              //   },
+              // ),
               IconButton(
                 icon: Icon(
-                  Icons.favorite,
+                  Icons.person,
                   color:
                       _currentPage == 1 ? Palette.primary : Palette.deselected,
                 ),
                 onPressed: () {
                   setState(() {
                     _currentPage = 1;
-                    _controller.jumpToPage(_currentPage);
-                  });
-                },
-              ),
-              const SizedBox(
-                width: 50,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.chat,
-                  color:
-                      _currentPage == 2 ? Palette.primary : Palette.deselected,
-                ),
-                isSelected: true,
-                onPressed: () {
-                  setState(() {
-                    _currentPage = 2;
-                    _controller.jumpToPage(_currentPage);
-                  });
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.person,
-                  color:
-                      _currentPage == 3 ? Palette.primary : Palette.deselected,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _currentPage = 3;
                     _controller.jumpToPage(_currentPage);
                   });
                 },

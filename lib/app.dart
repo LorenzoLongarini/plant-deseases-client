@@ -2,6 +2,7 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_deseases_client/common/navigation/router/router.dart';
 import 'package:plant_deseases_client/common/utils/colors.dart' as colors;
+import 'package:plant_deseases_client/common/utils/colors.dart';
 
 class App extends StatefulWidget {
   const App({
@@ -27,10 +28,13 @@ class _AppState extends State<App> {
         routerConfig: router,
         themeMode: _themeMode,
         theme: ThemeData(
-          colorScheme:
-              ColorScheme.fromSwatch(primarySwatch: colors.primaryColor)
-                  .copyWith(
-            background: Colors.white,
+          iconTheme: IconThemeData(
+            color: Palette.primary,
+          ),
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: colors.primaryColor,
+          ).copyWith(
+            background: Palette.white,
           ),
         ),
       ),

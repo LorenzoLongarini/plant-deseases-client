@@ -9,3 +9,12 @@ type Plant @model @auth(rules: [{ allow: owner }]) {
   temperature: String!
   co2: String!
 }
+
+type Message @model @auth(rules: [
+  { allow: owner, operations: [create, delete, update, read] },
+  { allow: public, operations: [create, delete, update, read] }
+  ]) {
+  id: ID!
+  message: String!
+  userType: String
+}

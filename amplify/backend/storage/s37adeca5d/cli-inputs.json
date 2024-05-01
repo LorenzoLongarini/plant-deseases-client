@@ -1,0 +1,16 @@
+{
+  "resourceName": "s37adeca5d",
+  "policyUUID": "7adeca5d",
+  "bucketName": "amplifyplantdeseasesstorage",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

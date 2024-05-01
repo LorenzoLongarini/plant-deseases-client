@@ -1,4 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -18,16 +17,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  SignupData? _signupData;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<String> _onSignUp(BuildContext context, SignupData data) async {
+  Future<String?> _onSignUp(BuildContext context, SignupData data) async {
     try {
-      await Amplify.Auth.signUp(
+      return await Amplify.Auth.signUp(
         username: data.name!,
         password: data.password!,
         options: SignUpOptions(
@@ -35,52 +27,83 @@ class _LoginState extends State<Login> {
             AuthUserAttributeKey.email: data.name!,
           },
         ),
-      );
-      _signupData = data;
-      return '';
+      ).then((value) => null);
     } on AuthException catch (e) {
       return 'Error signing up: ${e.message}';
     }
   }
 
-  Future<String> _onLogin(BuildContext context, LoginData data) async {
+  Future<String?> _onLogin(BuildContext context, LoginData data) async {
     try {
       final session = await Amplify.Auth.fetchAuthSession();
-      // SignInResult res;
       if (session.isSignedIn) {
         Amplify.Auth.signOut().then((value) async {
-          await Amplify.Auth.signIn(
+          return await Amplify.Auth.signIn(
             username: data.name,
             password: data.password,
           );
-        });
+        }).then((value) => null);
       } else {
-        await Amplify.Auth.signIn(
+        return await Amplify.Auth.signIn(
           username: data.name,
           password: data.password,
-        );
+        ).then((value) => null);
       }
-      return '';
     } on AuthException catch (e) {
       return 'Error login: ${e.message}';
     }
+    return null;
   }
 
-  Future<String> _onRecoverPassword(String email) async {
+  Future<String?> _onRecoverPassword(String email) async {
     try {
-      final res = await Amplify.Auth.resetPassword(username: email);
-      if (res.nextStep.updateStep.name == 'confirmResetPasswordWithCode') {
-        context.goNamed(AppRoute.reset.name, extra: email);
-      }
-      return '';
+      return await Amplify.Auth.resetPassword(username: email)
+          .then((value) => null);
     } on AuthException catch (e) {
       return 'Error reset password: ${e.message}';
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  Future<String?> _onConfirmRecover(
+      {required LoginData data, required String code}) async {
+    try {
+      return await Amplify.Auth.confirmResetPassword(
+        username: data.name,
+        newPassword: data.password,
+        confirmationCode: code,
+      ).then((value) => null);
+    } on AuthException catch (e) {
+      return 'Error confirm recover: ${e.message}';
+    }
+  }
+
+  Future<String?> _verifyCode({
+    required LoginData data,
+    required String code,
+  }) async {
+    try {
+      final res = await Amplify.Auth.confirmSignUp(
+        username: data.name,
+        confirmationCode: code,
+      );
+      if (res.isSignUpComplete) {
+        return await Amplify.Auth.signIn(
+                username: data.name, password: data.password)
+            .then((value) => null);
+      }
+      return null;
+    } on AuthException catch (e) {
+      return 'Error verify code: ${e.message}';
+    }
+  }
+
+  Future<String?> _resendCode(SignupData data) async {
+    try {
+      return await Amplify.Auth.resendSignUpCode(username: data.name!)
+          .then((value) => null);
+    } on AuthException catch (e) {
+      return 'Error resend code: ${e.message}';
+    }
   }
 
   @override
@@ -90,22 +113,21 @@ class _LoginState extends State<Login> {
       savedEmail: EnvVars.username,
       savedPassword: EnvVars.password,
       theme: LoginTheme(
-        // logoWidth: 30,
-        // beforeHeroFontSize: 32,
-        primaryColor: Palette.primary,
-        accentColor: const Color.fromRGBO(255, 207, 68, .2),
-        // headerMargin: 0.0,
-        // cardInitialHeight: 600,
-        // authButtonPadding: EdgeInsets.symmetric(vertical: 0),
-
-        /// Default: deviceSize.height / 2 - cardInitialHeight == 300 / 2
+        pageColorLight: Palette.white,
         cardTopPosition: MediaQuery.of(context).size.height / 5,
-        buttonTheme: const LoginButtonTheme(
-          backgroundColor: Color.fromRGBO(72, 119, 42, 1),
+        inputTheme: InputDecorationTheme(
+          fillColor: Palette.lightGreen,
+          labelStyle: TextStyle(
+            color: Palette.primary,
+          ),
+          prefixIconColor: Palette.primary,
+          suffixIconColor: Palette.primary,
         ),
-
-        cardTheme: const CardTheme(
-            color: Colors.white, surfaceTintColor: Colors.white),
+        cardTheme: CardTheme(
+          color: Palette.white,
+          shadowColor: Palette.white,
+          surfaceTintColor: Palette.white,
+        ),
       ),
       headerWidget: Align(
         alignment: Alignment.center,
@@ -114,21 +136,35 @@ class _LoginState extends State<Login> {
           child: Lottie.asset("assets/lottie/login.json"),
         ),
       ),
-      // logo: AssetImage("assets/img/login.png"),
       onLogin: (LoginData data) {
         return _onLogin(context, data);
       },
-      onSignup: (SignupData data) => _onSignUp(context, data),
-      onSubmitAnimationCompleted: () async {
-        final session = await Amplify.Auth.fetchAuthSession();
-        // _isSignedIn
-        session.isSignedIn
-            ? context.goNamed(AppRoute.home.name)
-            : context.goNamed(AppRoute.confirm.name, extra: _signupData);
+      onSignup: (SignupData data) {
+        return _onSignUp(context, data);
       },
-      // termsOfService: [TermOfService(id: '1', mandatory: true, text: 'prova')],
+      onConfirmSignup: (code, data) async {
+        return _verifyCode(
+          data: data,
+          code: code,
+        );
+      },
       onRecoverPassword: (String data) {
         return _onRecoverPassword(data);
+      },
+      onConfirmRecover: (code, data) async {
+        return _onConfirmRecover(code: code, data: data);
+      },
+      onResendCode: (data) async {
+        return _resendCode(data);
+      },
+      onSubmitAnimationCompleted: () async {
+        final session = await Amplify.Auth.fetchAuthSession();
+
+        session.isSignedIn
+            ? context.goNamed(AppRoute.home.name)
+            : context.goNamed(
+                AppRoute.login.name,
+              );
       },
     );
   }

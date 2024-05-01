@@ -28,3 +28,15 @@ https://xxxx.awsapps.com/start
 ```
 
 insert username (not email) and password
+
+go to .aws folder and change in credentials:
+
+```
+aws_access_key_id
+```
+```
+aws_secret_access_key
+```
+```
+aws_session_token
+```

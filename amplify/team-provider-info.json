@@ -19,5 +19,29 @@
         "plantdeseasesclient": {}
       }
     }
+  },
+  "plantdes": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-plantdeseasesclient-plantdes-b86bc-authRole",
+      "UnauthRoleArn": "arn:aws:iam::339713181019:role/amplify-plantdeseasesclient-plantdes-b86bc-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::339713181019:role/amplify-plantdeseasesclient-plantdes-b86bc-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-plantdeseasesclient-plantdes-b86bc-deployment",
+      "UnauthRoleName": "amplify-plantdeseasesclient-plantdes-b86bc-unauthRole",
+      "StackName": "amplify-plantdeseasesclient-plantdes-b86bc",
+      "StackId": "arn:aws:cloudformation:eu-north-1:339713181019:stack/amplify-plantdeseasesclient-plantdes-b86bc/107c4990-06b6-11ef-8cb5-0a6f6d943991",
+      "AmplifyAppId": "d3634bpd09kvq4"
+    },
+    "categories": {
+      "auth": {
+        "plantdeseasesclient1d25d883": {}
+      },
+      "api": {
+        "plantdeseasesclient": {}
+      },
+      "storage": {
+        "s37adeca5d": {}
+      }
+    }
   }
 }
