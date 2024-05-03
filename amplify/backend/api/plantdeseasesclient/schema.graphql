@@ -12,9 +12,10 @@ type Plant @model @auth(rules: [{ allow: owner }]) {
 
 type Message @model @auth(rules: [
   { allow: owner, operations: [create, delete, update, read] },
-  { allow: public, operations: [create, delete, update, read] }
+  { allow: private, operations: [create, delete, update, read] }
   ]) {
   id: ID!
+  userId: String!
   message: String!
   userType: String
 }

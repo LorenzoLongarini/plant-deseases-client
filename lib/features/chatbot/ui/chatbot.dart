@@ -1,9 +1,12 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plant_deseases_client/common/navigation/router/routes.dart';
+import 'package:plant_deseases_client/common/ui/custom_widgets/dialog/custom_alert_dialog.dart';
 import 'package:plant_deseases_client/common/utils/colors.dart';
 import 'package:plant_deseases_client/features/chatbot/controller/messages_list_controller.dart';
+import 'package:plant_deseases_client/features/chatbot/service/message_service.dart';
 import 'package:plant_deseases_client/features/chatbot/utils/constants/user_type.dart';
 import 'package:plant_deseases_client/features/chatbot/ui/components/bottom_input_field.dart';
 import 'package:plant_deseases_client/features/chatbot/ui/components/bubble_chat.dart';
@@ -19,7 +22,7 @@ class _ChatbotState extends ConsumerState<Chatbot> {
 
   @override
   Widget build(BuildContext context) {
-    final messagesList = ref.watch(messagesListControllerProvider);
+    final messagesList = ref.watch(messageAPIServiceStreamProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -32,24 +35,44 @@ class _ChatbotState extends ConsumerState<Chatbot> {
           // automaticallyImplyLeading: false,
           title: const Text('ChatBot'),
         ),
-        body: switch (messagesList) {
+        body:
+            // StreamBuilder(stream: messagesList.getMessages(),
+
+            //  builder: builder)
+
+            switch (messagesList) {
           AsyncData(:final value) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
               child: Column(
                 children: [
                   Expanded(
                     child: Align(
-                      alignment: Alignment.topCenter,
+                      alignment: Alignment.bottomCenter,
                       child: ListView.builder(
-                          reverse: true,
+                          // reverse: true,
                           shrinkWrap: true,
                           itemCount: value.length,
                           itemBuilder: (context, index) {
                             final message = value[index];
-                            return BubbleMessage(
-                              isTail: true,
-                              message: message.message,
-                              userType: UserType.sender,
+                            return GestureDetector(
+                              onLongPress: () => showDialog(
+                                context: context,
+                                builder: (context) => CustomAlertDialog(
+                                  title: 'Are you sure to delete this message?',
+                                  onPressed: () {
+                                    ref
+                                        .read(messagesListControllerProvider
+                                            .notifier)
+                                        .removeMessage(message: value[index]);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                              child: BubbleMessage(
+                                isTail: true,
+                                message: message.message,
+                                userType: message.userType!,
+                              ),
                             );
                           }),
                     ),
@@ -66,79 +89,59 @@ class _ChatbotState extends ConsumerState<Chatbot> {
                             child: BottomInputField(
                               controller: _controller,
                               onPressed: () {
+                                final currMess = _controller.text;
+                                setState(() {
+                                  _controller.text = '';
+                                });
                                 ref
                                     .read(
                                         messagesListControllerProvider.notifier)
                                     .addMessage(
-                                      messageContent: _controller.text,
+                                      messageContent: currMess,
+                                      userId: "1",
                                       userType: UserType.sender.name,
+                                    )
+                                    .then(
+                                      (value) => ref
+                                          .read(messagesListControllerProvider
+                                              .notifier)
+                                          .addMessage(
+                                            userId: "1",
+                                            messageContent: currMess,
+                                            userType: UserType.chatbot.name,
+                                          ),
                                     );
-                                setState(() {
-                                  _controller.text = '';
-                                });
                               },
                             ),
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text(
-                                  'Are you sure to delete the chat?',
-                                  style: TextStyle(fontSize: 20),
+                        Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          child: IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => CustomAlertDialog(
+                                  title: 'Are you sure to delete the chat?',
+                                  onPressed: () {
+                                    ref
+                                        .read(messagesListControllerProvider
+                                            .notifier)
+                                        .removeAllMessages(messages: value);
+                                    Navigator.pop(context);
+                                  },
                                 ),
-                                actions: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          ref
-                                              .read(
-                                                  messagesListControllerProvider
-                                                      .notifier)
-                                              .removeAllMessages(
-                                                  messages: value)
-                                              .then(
-                                                (value) =>
-                                                    Navigator.pop(context),
-                                              );
-                                        },
-                                        child: const Text(
-                                          'Yes',
-                                          style: TextStyle(
-                                              color: Colors.red, fontSize: 15),
-                                        ),
-                                      ),
-                                      TextButton(
-                                        child: Text(
-                                          'No',
-                                          style: TextStyle(
-                                              color: Palette.primary,
-                                              fontSize: 15),
-                                        ),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  // const SizedBox(
-                  //   height: 25,
-                  // ),
                 ],
               ),
             ),

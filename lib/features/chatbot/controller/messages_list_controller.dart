@@ -22,9 +22,11 @@ class MessagesListController extends _$MessagesListController {
   Future<void> addMessage({
     required String messageContent,
     required String userType,
+    required String userId,
   }) async {
     final message = Message(
       message: messageContent,
+      userId: userId,
       userType: userType,
     );
 
@@ -61,4 +63,9 @@ class MessagesListController extends _$MessagesListController {
       return _fetchMessages();
     });
   }
+
+  // Stream<GraphQLResponse<Message>> getMessagesStream() {
+  //   final messagesRepository = ref.read(messagesRepositoryProvider);
+  //   return messagesRepository.getMessagesStreamRepo();
+  // }
 }

@@ -1,4 +1,4 @@
 enum UserType {
   sender,
-  receiver,
+  chatbot,
 }

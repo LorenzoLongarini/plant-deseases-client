@@ -31,8 +31,6 @@ class _BaseState extends State<Base> {
             controller: _controller,
             children: const [
               PlantsView(),
-              // Favorites(),
-              // Chatbot(),
               Account(),
             ],
             onPageChanged: (value) => setState(() {

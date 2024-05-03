@@ -27,6 +27,7 @@ import 'package:amplify_core/amplify_core.dart' as amplify_core;
 class Message extends amplify_core.Model {
   static const classType = const _MessageModelType();
   final String id;
+  final String? _userId;
   final String? _message;
   final String? _userType;
   final amplify_core.TemporalDateTime? _createdAt;
@@ -43,6 +44,19 @@ class Message extends amplify_core.Model {
       return MessageModelIdentifier(
         id: id
       );
+  }
+  
+  String get userId {
+    try {
+      return _userId!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   String get message {
@@ -70,11 +84,12 @@ class Message extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Message._internal({required this.id, required message, userType, createdAt, updatedAt}): _message = message, _userType = userType, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Message._internal({required this.id, required userId, required message, userType, createdAt, updatedAt}): _userId = userId, _message = message, _userType = userType, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Message({String? id, required String message, String? userType}) {
+  factory Message({String? id, required String userId, required String message, String? userType}) {
     return Message._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
+      userId: userId,
       message: message,
       userType: userType);
   }
@@ -88,6 +103,7 @@ class Message extends amplify_core.Model {
     if (identical(other, this)) return true;
     return other is Message &&
       id == other.id &&
+      _userId == other._userId &&
       _message == other._message &&
       _userType == other._userType;
   }
@@ -101,6 +117,7 @@ class Message extends amplify_core.Model {
     
     buffer.write("Message {");
     buffer.write("id=" + "$id" + ", ");
+    buffer.write("userId=" + "$_userId" + ", ");
     buffer.write("message=" + "$_message" + ", ");
     buffer.write("userType=" + "$_userType" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
@@ -110,19 +127,22 @@ class Message extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Message copyWith({String? message, String? userType}) {
+  Message copyWith({String? userId, String? message, String? userType}) {
     return Message._internal(
       id: id,
+      userId: userId ?? this.userId,
       message: message ?? this.message,
       userType: userType ?? this.userType);
   }
   
   Message copyWithModelFieldValues({
+    ModelFieldValue<String>? userId,
     ModelFieldValue<String>? message,
     ModelFieldValue<String?>? userType
   }) {
     return Message._internal(
       id: id,
+      userId: userId == null ? this.userId : userId.value,
       message: message == null ? this.message : message.value,
       userType: userType == null ? this.userType : userType.value
     );
@@ -130,17 +150,19 @@ class Message extends amplify_core.Model {
   
   Message.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
+      _userId = json['userId'],
       _message = json['message'],
       _userType = json['userType'],
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'message': _message, 'userType': _userType, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'userId': _userId, 'message': _message, 'userType': _userType, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
+    'userId': _userId,
     'message': _message,
     'userType': _userType,
     'createdAt': _createdAt,
@@ -149,6 +171,7 @@ class Message extends amplify_core.Model {
 
   static final amplify_core.QueryModelIdentifier<MessageModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<MessageModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
+  static final USERID = amplify_core.QueryField(fieldName: "userId");
   static final MESSAGE = amplify_core.QueryField(fieldName: "message");
   static final USERTYPE = amplify_core.QueryField(fieldName: "userType");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
@@ -178,6 +201,12 @@ class Message extends amplify_core.Model {
     ];
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: Message.USERID,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: Message.MESSAGE,

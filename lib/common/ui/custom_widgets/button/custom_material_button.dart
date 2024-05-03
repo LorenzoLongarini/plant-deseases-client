@@ -5,28 +5,28 @@ class CustomMaterialButton extends StatelessWidget {
   const CustomMaterialButton({
     super.key,
     this.onPressed,
-    this.isEnabled = true,
+    this.title = '',
   });
   final void Function()? onPressed;
-  final bool? isEnabled;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      height: 40,
-      minWidth: 120,
+    return Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      onPressed: isEnabled! ? onPressed : null,
+      shadowColor: Palette.primary,
       elevation: 4,
       color: Palette.primary,
-      disabledColor: Palette.disabledButton,
-      child: Text(
-        'RESET',
-        style: TextStyle(
-          color: Palette.white,
-          fontSize: 14,
+      child: TextButton(
+        onPressed: onPressed,
+        child: Text(
+          title!,
+          style: TextStyle(
+            color: Palette.white,
+            fontSize: 14,
+          ),
         ),
       ),
     );

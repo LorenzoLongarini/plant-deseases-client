@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plant_deseases_client/common/utils/colors.dart';
 
 class CustomListTile extends StatefulWidget {
   const CustomListTile({
@@ -30,7 +31,7 @@ class _CustomListTileState extends State<CustomListTile> {
               borderRadius: BorderRadius.circular(10)),
           tileColor: const Color.fromARGB(255, 244, 244, 244),
           leading: Icon(widget.icon),
-          trailing: const Icon(Icons.arrow_right),
+          trailing: const Icon(Icons.keyboard_arrow_right),
           title: Text(
             widget.text,
             style: const TextStyle(

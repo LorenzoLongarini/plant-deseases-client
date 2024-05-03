@@ -2,18 +2,21 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plant_deseases_client/common/navigation/router/routes.dart';
+import 'package:plant_deseases_client/common/ui/custom_widgets/dialog/custom_alert_dialog.dart';
 import 'package:plant_deseases_client/common/ui/custom_widgets/list_tile/list_tile.dart';
+import 'package:plant_deseases_client/features/account/controller/account_controller.dart';
 
-class Account extends StatefulWidget {
+class Account extends ConsumerStatefulWidget {
   const Account({super.key});
 
   @override
-  State<Account> createState() => _AccountState();
+  ConsumerState<Account> createState() => _AccountState();
 }
 
-class _AccountState extends State<Account> {
+class _AccountState extends ConsumerState<Account> {
   // AuthUser? _user;
   bool isDarkMode =
       SchedulerBinding.instance.platformDispatcher.platformBrightness ==
@@ -22,141 +25,127 @@ class _AccountState extends State<Account> {
   @override
   void initState() {
     super.initState();
-    // .then(
-    //   (user) => setState(() {
-    //     _user = user;
-    //   }),
-    // );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Amplify.Auth.getCurrentUser(),
-        builder: (context, snapshot) {
-          // _user = snapshot;
-          return !snapshot.hasData
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Scaffold(
-                  appBar: AppBar(
-                    automaticallyImplyLeading: false,
-                    title: const Text('Account'),
-                    actions: <Widget>[
-                      IconButton(
-                        icon: Icon(isDarkMode
-                            ? Icons.brightness_2
-                            : Icons.brightness_4),
-                        onPressed: () {
-                          // isDarkMode ? App.switch (expression) {
-                          //   pattern => value,
-                          // }
-                          // ? App.of(context).changeTheme(ThemeMode.light)
-                          // : MyApp.of(context).changeTheme(ThemeMode.dark);
-                          setState(() {
-                            isDarkMode = !isDarkMode;
-                          });
-                        },
+    final currUserInfos = ref.watch(accountControllerProvider);
+
+    return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text('Account'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(isDarkMode ? Icons.brightness_2 : Icons.brightness_4),
+              onPressed: () {
+                // isDarkMode ? App.switch (expression) {
+                //   pattern => value,
+                // }
+                // ? App.of(context).changeTheme(ThemeMode.light)
+                // : MyApp.of(context).changeTheme(ThemeMode.dark);
+                setState(() {
+                  isDarkMode = !isDarkMode;
+                });
+              },
+            ),
+          ],
+        ),
+        body: switch (currUserInfos) {
+          AsyncData(:final value) => Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    const CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Color.fromARGB(255, 64, 120, 27),
+                      child: CircleAvatar(
+                        radius: 65,
+                        backgroundImage:
+                            AssetImage('assets/img/default-avatar.jpg'),
                       ),
-                    ],
-                  ),
-                  body: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          const CircleAvatar(
-                            radius: 70,
-                            backgroundColor: Color.fromARGB(255, 64, 120, 27),
-                            child: CircleAvatar(
-                              radius: 65,
-                              backgroundImage:
-                                  AssetImage('assets/img/default-avatar.jpg'),
-                            ),
-                          ),
-                          Text(
-                            snapshot.data!.username,
+                    ),
+                    value[AuthUserAttributeKey.nickname] != null
+                        ? Text(
+                            value[AuthUserAttributeKey.nickname]!,
                             style: const TextStyle(
                                 fontSize: 10,
                                 color: Color.fromARGB(255, 210, 210, 210)),
-                          ),
-                        ],
-                      ),
-
-                      // AccountOptions.values.map((e) => null)
-                      // ListView.separated()
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          )
+                        : const SizedBox.shrink(),
+                    value[AuthUserAttributeKey.email] != null
+                        ? Text(
+                            value[AuthUserAttributeKey.email]!,
+                            style: const TextStyle(
+                                fontSize: 10,
+                                color: Color.fromARGB(255, 210, 210, 210)),
+                          )
+                        : const SizedBox.shrink(),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomListTile(
+                      icon: Icons.person,
+                      text: 'My Profile',
+                      onTap: () => context.goNamed(AppRoute.myaccount.name,
+                          extra: value),
+                    ),
+                    const CustomListTile(
+                      icon: Icons.settings,
+                      text: 'Settings',
+                    ),
+                    const CustomListTile(
+                      icon: Icons.chat_bubble,
+                      text: 'FAQs',
+                    ),
+                    const CustomListTile(
+                      icon: Icons.info,
+                      text: 'Info',
+                    ),
+                    MaterialButton(
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const CustomListTile(
-                            icon: Icons.person,
-                            text: 'My Profile',
-                          ),
-                          const CustomListTile(
-                            icon: Icons.settings,
-                            text: 'Settings',
-                          ),
-                          const CustomListTile(
-                            icon: Icons.chat_bubble,
-                            text: 'FAQs',
-                          ),
-                          const CustomListTile(
-                            icon: Icons.info,
-                            text: 'Info',
-                          ),
-                          MaterialButton(
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Logout',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => CupertinoAlertDialog(
-                                  title: const Text(
-                                    'Sei sicuro di voler effettuare il logout?',
-                                  ),
-                                  actions: [
-                                    CupertinoDialogAction(
-                                      child: const Text(
-                                        'Si',
-                                        style:
-                                            TextStyle(color: Colors.redAccent),
-                                      ),
-                                      onPressed: () {
-                                        Amplify.Auth.signOut()
-                                            .then(
-                                              (value) => {
-                                                context.goNamed(
-                                                    AppRoute.login.name),
-                                              },
-                                            )
-                                            .then((_) => false);
-                                      },
-                                    ),
-                                    CupertinoDialogAction(
-                                      child: const Text(
-                                        'No',
-                                        style: TextStyle(color: Colors.blue),
-                                      ),
-                                      onPressed: () => Navigator.pop(context),
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
+                          Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.red),
                           ),
                         ],
                       ),
-                    ],
-                  ));
-        });
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => CustomAlertDialog(
+                            title: 'Sei sicuro di voler effettuare il logout?',
+                            onPressed: () => Amplify.Auth.signOut()
+                                .then(
+                                  (value) => {
+                                    context.goNamed(AppRoute.login.name),
+                                  },
+                                )
+                                .then((_) => false),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          AsyncError(:final error) => Text(
+              error.toString(),
+            ),
+          _ => const Center(
+              child: CircularProgressIndicator(),
+            ),
+        }
+
+        // AccountOptions.values.map((e) => null)
+        // ListView.separated()
+        );
   }
 }

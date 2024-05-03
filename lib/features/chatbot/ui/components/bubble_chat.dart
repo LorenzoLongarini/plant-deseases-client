@@ -14,15 +14,18 @@ class BubbleMessage extends StatelessWidget {
   final String message;
   final bool? isTail;
   final TextStyle? textStyle;
-  final UserType userType;
+  final String userType;
 
   @override
   Widget build(BuildContext context) {
     return BubbleSpecialThree(
+      isSender: userType == UserType.sender.name,
       text: message,
       tail: isTail!,
       textStyle: textStyle!,
-      color: userType == UserType.sender ? Palette.primary : Palette.secundary,
+      color: userType == UserType.sender.name
+          ? Palette.primary
+          : Palette.secundary,
     );
   }
 }

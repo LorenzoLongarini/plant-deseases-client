@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:plant_deseases_client/common/utils/colors.dart';
-import 'package:provider/provider.dart';
 
 class BottomInputField extends StatelessWidget {
   const BottomInputField({
@@ -16,6 +15,7 @@ class BottomInputField extends StatelessWidget {
     return SafeArea(
       bottom: true,
       child: Container(
+        margin: const EdgeInsets.only(top: 20),
         constraints: const BoxConstraints(minHeight: 48),
         width: double.infinity,
         decoration: BoxDecoration(
@@ -27,8 +27,6 @@ class BottomInputField extends StatelessWidget {
         child: Stack(
           children: [
             TextFormField(
-              // focusNode: context.read<ChatController>().focusNode,
-              // onChanged: context.read<ChatController>().onFieldChanged,
               controller: controller,
               maxLines: null,
               textAlignVertical: TextAlignVertical.top,

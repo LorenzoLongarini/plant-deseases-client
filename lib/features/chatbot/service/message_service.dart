@@ -4,15 +4,28 @@ import 'package:plant_deseases_client/models/Message.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 
-final messagesAPIServiceProvider = Provider<MessagesAPIService>((ref) {
+final messagesAPIServiceProvider =
+    Provider.autoDispose<MessagesAPIService>((ref) {
   final service = MessagesAPIService();
   return service;
 });
 
-// final messagesStreamProvider = StreamProvider.autoDispose<List<Message>>((ref) {
-//   final service = ref.watch(messagesAPIServiceProvider);
-//   return service.subscribeToMessages();
-// });
+final messageAPIServiceStreamProvider =
+    StreamProvider.autoDispose<List<Message>>((ref) async* {
+  final subscriptionRequest = ModelSubscriptions.onCreate(Message.classType);
+  final operation = Amplify.API.subscribe(
+    subscriptionRequest,
+    onEstablished: () => safePrint("Subscription established"),
+  );
+  List<Message> allMessages = [];
+  yield allMessages;
+  await for (final GraphQLResponse graphqlMessage in operation) {
+    //TODO: gestire eventuali errori
+    final message = graphqlMessage.data;
+    allMessages = [...allMessages, message];
+    yield allMessages;
+  }
+});
 
 class MessagesAPIService {
   MessagesAPIService();
@@ -27,6 +40,9 @@ class MessagesAPIService {
         safePrint('errors: ${response.errors}');
         return const [];
       }
+      messages.sort(
+        (a, b) => a!.createdAt!.compareTo(b!.createdAt!),
+      );
       return messages.map((e) => e as Message).toList();
     } on Exception catch (error) {
       safePrint('fail $error');
@@ -90,24 +106,4 @@ class MessagesAPIService {
       safePrint('deleteTrip failed: $error');
     }
   }
-
-  // Stream<List<Message>> subscribeToMessages() {
-  //   final streamController = StreamController<List<Message>>();
-  //   final request = ModelSubscriptions.onCreate(Message.classType);
-  //   final stream = Amplify.API.subscribe(request);
-
-  //   stream.listen((event) {
-  //     if (event.data != null) {
-  //       getMessages().then((messages) => streamController.add(messages));
-  //     }
-  //   }, onError: (error) {
-  //     safePrint('Subscription failed: $error');
-  //     streamController.addError(error); // Aggiungi l'errore al controller
-  //   }, onDone: () {
-  //     streamController
-  //         .close(); // Chiudi il controller solo quando la sottoscrizione è completata
-  //   });
-
-  //   return streamController.stream;
-  // }
 }

@@ -31,4 +31,8 @@ class MessagesRepository {
   Future<void> deleteAllMessages(List<Message> messages) async {
     return messagesAPIService.deleteAllMessages(messages);
   }
+
+  // Stream<GraphQLResponse<Message>> getMessagesStreamRepo() {
+  //   return messagesAPIService.subscribeToMessages();
+  // }
 }
