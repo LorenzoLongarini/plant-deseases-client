@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:plant_deseases_client/features/plants/data/plants_repository.dart';

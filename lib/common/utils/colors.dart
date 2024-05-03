@@ -57,6 +57,12 @@ class Palette {
               Brightness.dark
           ? Colors.white
           : Colors.white;
+
+  static Color get background =>
+      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+              Brightness.dark
+          ? Colors.black
+          : Colors.white;
   static Color get deselected =>
       SchedulerBinding.instance.platformDispatcher.platformBrightness ==
               Brightness.dark

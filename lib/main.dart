@@ -29,7 +29,15 @@ Future<void> _configureAmplify() async {
   try {
     await Amplify.addPlugins([
       AmplifyAuthCognito(),
-      AmplifyAPI(modelProvider: ModelProvider.instance),
+      AmplifyAPI(
+        modelProvider: ModelProvider.instance,
+        subscriptionOptions: GraphQLSubscriptionOptions(
+          retryOptions: RetryOptions(
+            delayFactor: const Duration(milliseconds: 300),
+            maxAttempts: double.maxFinite.toInt(),
+          ),
+        ),
+      ),
       AmplifyStorageS3(),
     ]);
     await Amplify.configure(amplifyconfig);

@@ -22,7 +22,6 @@
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
-
 /** This is an auto generated class representing the Message type in your schema. */
 class Message extends amplify_core.Model {
   static const classType = const _MessageModelType();
@@ -35,215 +34,244 @@ class Message extends amplify_core.Model {
 
   @override
   getInstanceType() => classType;
-  
-  @Deprecated('[getId] is being deprecated in favor of custom primary key feature. Use getter [modelIdentifier] to get model identifier.')
+
+  @Deprecated(
+      '[getId] is being deprecated in favor of custom primary key feature. Use getter [modelIdentifier] to get model identifier.')
   @override
   String getId() => id;
-  
+
   MessageModelIdentifier get modelIdentifier {
-      return MessageModelIdentifier(
-        id: id
-      );
+    return MessageModelIdentifier(id: id);
   }
-  
+
   String get userId {
     try {
       return _userId!;
-    } catch(e) {
+    } catch (e) {
       throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
     }
   }
-  
+
   String get message {
     try {
       return _message!;
-    } catch(e) {
+    } catch (e) {
       throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
     }
   }
-  
+
   String? get userType {
     return _userType;
   }
-  
+
   amplify_core.TemporalDateTime? get createdAt {
     return _createdAt;
   }
-  
+
   amplify_core.TemporalDateTime? get updatedAt {
     return _updatedAt;
   }
-  
-  const Message._internal({required this.id, required userId, required message, userType, createdAt, updatedAt}): _userId = userId, _message = message, _userType = userType, _createdAt = createdAt, _updatedAt = updatedAt;
-  
-  factory Message({String? id, required String userId, required String message, String? userType}) {
+
+  const Message._internal(
+      {required this.id,
+      required userId,
+      required message,
+      userType,
+      createdAt,
+      updatedAt})
+      : _userId = userId,
+        _message = message,
+        _userType = userType,
+        _createdAt = createdAt,
+        _updatedAt = updatedAt;
+
+  factory Message(
+      {String? id,
+      required String userId,
+      required String message,
+      String? userType}) {
     return Message._internal(
-      id: id == null ? amplify_core.UUID.getUUID() : id,
-      userId: userId,
-      message: message,
-      userType: userType);
+        id: id == null ? amplify_core.UUID.getUUID() : id,
+        userId: userId,
+        message: message,
+        userType: userType);
   }
-  
+
   bool equals(Object other) {
     return this == other;
   }
-  
+
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Message &&
-      id == other.id &&
-      _userId == other._userId &&
-      _message == other._message &&
-      _userType == other._userType;
+        id == other.id &&
+        _userId == other._userId &&
+        _message == other._message &&
+        _userType == other._userType;
   }
-  
+
   @override
   int get hashCode => toString().hashCode;
-  
+
   @override
   String toString() {
     var buffer = new StringBuffer();
-    
+
     buffer.write("Message {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("userId=" + "$_userId" + ", ");
     buffer.write("message=" + "$_message" + ", ");
     buffer.write("userType=" + "$_userType" + ", ");
-    buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
+    buffer.write("createdAt=" +
+        (_createdAt != null ? _createdAt.format() : "null") +
+        ", ");
+    buffer.write(
+        "updatedAt=" + (_updatedAt != null ? _updatedAt.format() : "null"));
     buffer.write("}");
-    
+
     return buffer.toString();
   }
-  
+
   Message copyWith({String? userId, String? message, String? userType}) {
     return Message._internal(
-      id: id,
-      userId: userId ?? this.userId,
-      message: message ?? this.message,
-      userType: userType ?? this.userType);
+        id: id,
+        userId: userId ?? this.userId,
+        message: message ?? this.message,
+        userType: userType ?? this.userType);
   }
-  
-  Message copyWithModelFieldValues({
-    ModelFieldValue<String>? userId,
-    ModelFieldValue<String>? message,
-    ModelFieldValue<String?>? userType
-  }) {
-    return Message._internal(
-      id: id,
-      userId: userId == null ? this.userId : userId.value,
-      message: message == null ? this.message : message.value,
-      userType: userType == null ? this.userType : userType.value
-    );
-  }
-  
-  Message.fromJson(Map<String, dynamic> json)  
-    : id = json['id'],
-      _userId = json['userId'],
-      _message = json['message'],
-      _userType = json['userType'],
-      _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
-  
-  Map<String, dynamic> toJson() => {
-    'id': id, 'userId': _userId, 'message': _message, 'userType': _userType, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
-  };
-  
-  Map<String, Object?> toMap() => {
-    'id': id,
-    'userId': _userId,
-    'message': _message,
-    'userType': _userType,
-    'createdAt': _createdAt,
-    'updatedAt': _updatedAt
-  };
 
-  static final amplify_core.QueryModelIdentifier<MessageModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<MessageModelIdentifier>();
+  Message copyWithModelFieldValues(
+      {ModelFieldValue<String>? userId,
+      ModelFieldValue<String>? message,
+      ModelFieldValue<String?>? userType}) {
+    return Message._internal(
+        id: id,
+        userId: userId == null ? this.userId : userId.value,
+        message: message == null ? this.message : message.value,
+        userType: userType == null ? this.userType : userType.value);
+  }
+
+  Message.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        _userId = json['userId'],
+        _message = json['message'],
+        _userType = json['userType'],
+        _createdAt = json['createdAt'] != null
+            ? amplify_core.TemporalDateTime.fromString(json['createdAt'])
+            : null,
+        _updatedAt = json['updatedAt'] != null
+            ? amplify_core.TemporalDateTime.fromString(json['updatedAt'])
+            : null;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'userId': _userId,
+        'message': _message,
+        'userType': _userType,
+        'createdAt': _createdAt?.format(),
+        'updatedAt': _updatedAt?.format()
+      };
+
+  Map<String, Object?> toMap() => {
+        'id': id,
+        'userId': _userId,
+        'message': _message,
+        'userType': _userType,
+        'createdAt': _createdAt,
+        'updatedAt': _updatedAt
+      };
+
+  static final amplify_core.QueryModelIdentifier<MessageModelIdentifier>
+      MODEL_IDENTIFIER =
+      amplify_core.QueryModelIdentifier<MessageModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
   static final USERID = amplify_core.QueryField(fieldName: "userId");
   static final MESSAGE = amplify_core.QueryField(fieldName: "message");
   static final USERTYPE = amplify_core.QueryField(fieldName: "userType");
-  static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
+  static var schema = amplify_core.Model.defineSchema(
+      define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Message";
     modelSchemaDefinition.pluralName = "Messages";
-    
+
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
-        authStrategy: amplify_core.AuthStrategy.OWNER,
-        ownerField: "owner",
-        identityClaim: "cognito:username",
-        provider: amplify_core.AuthRuleProvider.USERPOOLS,
-        operations: const [
-          amplify_core.ModelOperation.CREATE,
-          amplify_core.ModelOperation.DELETE,
-          amplify_core.ModelOperation.UPDATE,
-          amplify_core.ModelOperation.READ
-        ]),
+          authStrategy: amplify_core.AuthStrategy.OWNER,
+          ownerField: "owner",
+          identityClaim: "cognito:username",
+          provider: amplify_core.AuthRuleProvider.USERPOOLS,
+          operations: const [
+            amplify_core.ModelOperation.CREATE,
+            amplify_core.ModelOperation.DELETE,
+            amplify_core.ModelOperation.UPDATE,
+            amplify_core.ModelOperation.READ
+          ]),
       amplify_core.AuthRule(
-        authStrategy: amplify_core.AuthStrategy.PUBLIC,
-        operations: const [
-          amplify_core.ModelOperation.CREATE,
-          amplify_core.ModelOperation.DELETE,
-          amplify_core.ModelOperation.UPDATE,
-          amplify_core.ModelOperation.READ
-        ])
+          authStrategy: amplify_core.AuthStrategy.PUBLIC,
+          operations: const [
+            amplify_core.ModelOperation.CREATE,
+            amplify_core.ModelOperation.DELETE,
+            amplify_core.ModelOperation.UPDATE,
+            amplify_core.ModelOperation.READ
+          ])
     ];
-    
+
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
-    
+
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Message.USERID,
-      isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
-    ));
-    
+        key: Message.USERID,
+        isRequired: true,
+        ofType: amplify_core.ModelFieldType(
+            amplify_core.ModelFieldTypeEnum.string)));
+
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Message.MESSAGE,
-      isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
-    ));
-    
+        key: Message.MESSAGE,
+        isRequired: true,
+        ofType: amplify_core.ModelFieldType(
+            amplify_core.ModelFieldTypeEnum.string)));
+
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Message.USERTYPE,
-      isRequired: false,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
-      fieldName: 'createdAt',
-      isRequired: false,
-      isReadOnly: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
-    ));
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
-      fieldName: 'updatedAt',
-      isRequired: false,
-      isReadOnly: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
-    ));
+        key: Message.USERTYPE,
+        isRequired: false,
+        ofType: amplify_core.ModelFieldType(
+            amplify_core.ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.nonQueryField(
+            fieldName: 'createdAt',
+            isRequired: false,
+            isReadOnly: true,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.dateTime)));
+
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.nonQueryField(
+            fieldName: 'updatedAt',
+            isRequired: false,
+            isReadOnly: true,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.dateTime)));
   });
 }
 
 class _MessageModelType extends amplify_core.ModelType<Message> {
   const _MessageModelType();
-  
+
   @override
   Message fromJson(Map<String, dynamic> jsonData) {
     return Message.fromJson(jsonData);
   }
-  
+
   @override
   String modelName() {
     return 'Message';
@@ -258,37 +286,32 @@ class MessageModelIdentifier implements amplify_core.ModelIdentifier<Message> {
   final String id;
 
   /** Create an instance of MessageModelIdentifier using [id] the primary key. */
-  const MessageModelIdentifier({
-    required this.id});
-  
+  const MessageModelIdentifier({required this.id});
+
   @override
-  Map<String, dynamic> serializeAsMap() => (<String, dynamic>{
-    'id': id
-  });
-  
+  Map<String, dynamic> serializeAsMap() => (<String, dynamic>{'id': id});
+
   @override
   List<Map<String, dynamic>> serializeAsList() => serializeAsMap()
-    .entries
-    .map((entry) => (<String, dynamic>{ entry.key: entry.value }))
-    .toList();
-  
+      .entries
+      .map((entry) => (<String, dynamic>{entry.key: entry.value}))
+      .toList();
+
   @override
   String serializeAsString() => serializeAsMap().values.join('#');
-  
+
   @override
   String toString() => 'MessageModelIdentifier(id: $id)';
-  
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    
-    return other is MessageModelIdentifier &&
-      id == other.id;
+
+    return other is MessageModelIdentifier && id == other.id;
   }
-  
+
   @override
-  int get hashCode =>
-    id.hashCode;
+  int get hashCode => id.hashCode;
 }

@@ -1,4 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:plant_deseases_client/common/services/system_service.dart';
 import 'package:plant_deseases_client/features/account/service/account_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -30,5 +31,10 @@ class AccountController extends _$AccountController {
 
       return _fetchUserInfos();
     });
+  }
+
+  bool switchSystemTheme() {
+    final systemProvider = ref.read(systemServiceProvider);
+    return systemProvider;
   }
 }

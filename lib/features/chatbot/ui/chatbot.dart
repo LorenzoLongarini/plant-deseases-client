@@ -20,6 +20,7 @@ class Chatbot extends ConsumerStatefulWidget {
 class _ChatbotState extends ConsumerState<Chatbot> {
   final TextEditingController _controller = TextEditingController();
 
+  List<String> blackListId = [];
   @override
   Widget build(BuildContext context) {
     final messagesList = ref.watch(messageAPIServiceStreamProvider);
@@ -35,36 +36,41 @@ class _ChatbotState extends ConsumerState<Chatbot> {
           // automaticallyImplyLeading: false,
           title: const Text('ChatBot'),
         ),
-        body:
-            // StreamBuilder(stream: messagesList.getMessages(),
-
-            //  builder: builder)
-
-            switch (messagesList) {
+        body: switch (messagesList) {
           AsyncData(:final value) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
               child: Column(
                 children: [
                   Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ListView.builder(
-                          // reverse: true,
-                          shrinkWrap: true,
-                          itemCount: value.length,
-                          itemBuilder: (context, index) {
-                            final message = value[index];
-                            return GestureDetector(
+                    child: ListView.builder(
+                        // reverse: true,
+                        shrinkWrap: true,
+                        itemCount: value.length,
+                        itemBuilder: (context, index) {
+                          final message = value[index];
+                          return Visibility(
+                            visible: !blackListId.contains(value[index].id),
+                            child: GestureDetector(
                               onLongPress: () => showDialog(
                                 context: context,
                                 builder: (context) => CustomAlertDialog(
                                   title: 'Are you sure to delete this message?',
                                   onPressed: () {
+                                    setState(() {
+                                      blackListId.add(value[index].id);
+                                    });
                                     ref
                                         .read(messagesListControllerProvider
                                             .notifier)
                                         .removeMessage(message: value[index]);
                                     Navigator.pop(context);
+                                    ref.invalidate(
+                                        messageAPIServiceStreamProvider);
+
+                                    //TODO: clear list
+                                    // setState(() {
+                                    //   blackListId = [];
+                                    // });
                                   },
                                 ),
                               ),
@@ -73,9 +79,9 @@ class _ChatbotState extends ConsumerState<Chatbot> {
                                 message: message.message,
                                 userType: message.userType!,
                               ),
-                            );
-                          }),
-                    ),
+                            ),
+                          );
+                        }),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -124,10 +130,29 @@ class _ChatbotState extends ConsumerState<Chatbot> {
                                 builder: (context) => CustomAlertDialog(
                                   title: 'Are you sure to delete the chat?',
                                   onPressed: () {
-                                    ref
-                                        .read(messagesListControllerProvider
-                                            .notifier)
-                                        .removeAllMessages(messages: value);
+                                    try {
+                                      final totalMessages = value;
+                                      for (final val in value) {
+                                        blackListId.add(val.id);
+                                      }
+                                      ref
+                                          .read(messagesListControllerProvider
+                                              .notifier)
+                                          .removeAllMessages(
+                                              messages: totalMessages);
+
+                                      ref.invalidate(
+                                          messageAPIServiceStreamProvider);
+                                    } on Exception catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            e.toString(),
+                                          ),
+                                        ),
+                                      );
+                                    }
                                     Navigator.pop(context);
                                   },
                                 ),

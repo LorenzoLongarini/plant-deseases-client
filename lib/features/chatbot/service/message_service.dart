@@ -17,7 +17,9 @@ final messageAPIServiceStreamProvider =
     subscriptionRequest,
     onEstablished: () => safePrint("Subscription established"),
   );
-  List<Message> allMessages = [];
+  final provider = ref.read(messagesAPIServiceProvider);
+  // yield [];
+  List<Message> allMessages = await provider.getMessages();
   yield allMessages;
   await for (final GraphQLResponse graphqlMessage in operation) {
     //TODO: gestire eventuali errori

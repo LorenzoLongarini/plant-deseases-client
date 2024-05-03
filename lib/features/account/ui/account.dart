@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plant_deseases_client/common/navigation/router/routes.dart';
+import 'package:plant_deseases_client/common/services/system_service.dart';
 import 'package:plant_deseases_client/common/ui/custom_widgets/dialog/custom_alert_dialog.dart';
 import 'package:plant_deseases_client/common/ui/custom_widgets/list_tile/list_tile.dart';
 import 'package:plant_deseases_client/features/account/controller/account_controller.dart';
@@ -21,10 +22,12 @@ class _AccountState extends ConsumerState<Account> {
   bool isDarkMode =
       SchedulerBinding.instance.platformDispatcher.platformBrightness ==
           Brightness.dark;
-
+  bool systemMode = false;
   @override
   void initState() {
     super.initState();
+    //FIXME: dont use multiple providers in same widget
+    bool systemMode = ref.read(systemServiceProvider.notifier).state;
   }
 
   @override
@@ -37,15 +40,11 @@ class _AccountState extends ConsumerState<Account> {
           title: const Text('Account'),
           actions: <Widget>[
             IconButton(
-              icon: Icon(isDarkMode ? Icons.brightness_2 : Icons.brightness_4),
+              icon: Icon(systemMode ? Icons.brightness_2 : Icons.brightness_4),
               onPressed: () {
-                // isDarkMode ? App.switch (expression) {
-                //   pattern => value,
-                // }
-                // ? App.of(context).changeTheme(ThemeMode.light)
-                // : MyApp.of(context).changeTheme(ThemeMode.dark);
                 setState(() {
-                  isDarkMode = !isDarkMode;
+                  systemMode = !systemMode;
+                  ref.read(systemServiceProvider.notifier).state = systemMode;
                 });
               },
             ),
