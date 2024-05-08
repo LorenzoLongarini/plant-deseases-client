@@ -77,7 +77,8 @@ class _ChatbotState extends ConsumerState<Chatbot> {
                               child: BubbleMessage(
                                 isTail: true,
                                 message: message.message,
-                                userType: message.userType!,
+                                userType:
+                                    message.userType ?? UserType.chatbot.name,
                               ),
                             ),
                           );
@@ -99,6 +100,15 @@ class _ChatbotState extends ConsumerState<Chatbot> {
                                 setState(() {
                                   _controller.text = '';
                                 });
+
+                                ref
+                                    .read(
+                                        messagesListControllerProvider.notifier)
+                                    .addFlaskMessage(
+                                      messageContent: currMess,
+                                      userId: "1",
+                                      userType: UserType.chatbot.name,
+                                    );
                                 ref
                                     .read(
                                         messagesListControllerProvider.notifier)
@@ -106,17 +116,16 @@ class _ChatbotState extends ConsumerState<Chatbot> {
                                       messageContent: currMess,
                                       userId: "1",
                                       userType: UserType.sender.name,
-                                    )
-                                    .then(
-                                      (value) => ref
-                                          .read(messagesListControllerProvider
-                                              .notifier)
-                                          .addMessage(
-                                            userId: "1",
-                                            messageContent: currMess,
-                                            userType: UserType.chatbot.name,
-                                          ),
                                     );
+                                // .then((value) => ref.read(
+                                //         messagesListControllerProvider
+                                //             .notifier)
+                                // .addMessage(
+                                //   userId: "1",
+                                //   messageContent: currMess,
+                                //   userType: UserType.chatbot.name,
+                                // ),
+                                // );
                               },
                             ),
                           ),

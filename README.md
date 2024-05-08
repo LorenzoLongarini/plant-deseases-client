@@ -40,3 +40,8 @@ aws_secret_access_key
 ```
 aws_session_token
 ```
+
+update controller:
+```
+dart run build_runner build -d
+```

@@ -39,6 +39,26 @@ class MessagesListController extends _$MessagesListController {
     });
   }
 
+  Future<void> addFlaskMessage({
+    required String messageContent,
+    required String userType,
+    required String userId,
+  }) async {
+    final message = Message(
+      message: messageContent,
+      userId: userId,
+      userType: userType,
+    );
+
+    state = const AsyncValue.loading();
+
+    state = await AsyncValue.guard(() async {
+      final messagesRepository = ref.read(messagesRepositoryProvider);
+      await messagesRepository.addFlaskMessage(message);
+      return _fetchMessages();
+    });
+  }
+
   Future<void> removeMessage({
     required Message message,
   }) async {

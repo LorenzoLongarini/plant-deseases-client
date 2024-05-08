@@ -3,6 +3,9 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:plant_deseases_client/models/Message.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'package:plant_deseases_client/old/models/llm_item.dart';
+import 'dart:convert';
 
 final messagesAPIServiceProvider =
     Provider.autoDispose<MessagesAPIService>((ref) {
@@ -31,6 +34,50 @@ final messageAPIServiceStreamProvider =
 
 class MessagesAPIService {
   MessagesAPIService();
+  final url = 'http://10.0.2.2:8000/llm';
+  late List<LlmItem> lastItem;
+
+  Future<LlmItem> addMessageFlask(String query) async {
+    // if (query.isEmpty) {
+    //   return;
+    // }
+    Map<String, dynamic> request = {
+      "query": query,
+    };
+    final headers = {'Content-Type': 'application/json'};
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: json.encode(request),
+    );
+    Map<String, dynamic> responsePayload = json.decode(response.body);
+    // final answ =
+    return LlmItem(
+        id: responsePayload["id"], answer: responsePayload["answer"]);
+  }
+
+  Future<List<LlmItem>> getLastMessageFlask() async {
+    var response;
+    try {
+      response = await http.get(Uri.parse(url));
+      Map<String, dynamic> data = json.decode(response.body);
+      LlmItem item = LlmItem(id: data['id'], answer: data['answer']);
+      lastItem = [item];
+      return lastItem;
+      // lastItem = body
+      //     .map(
+      //       (e) => LlmItem(
+      //         id: e['id'],
+      //         answer: e['answer'],
+      //       ),
+      //     )
+      //     .toList();
+      // return lastItem;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
 
   Future<List<Message>> getMessages() async {
     try {

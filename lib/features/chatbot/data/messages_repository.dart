@@ -1,3 +1,4 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plant_deseases_client/features/chatbot/service/message_service.dart';
 import 'package:plant_deseases_client/models/Message.dart';
@@ -12,7 +13,14 @@ class MessagesRepository {
 
   final MessagesAPIService messagesAPIService;
 
-  Future<List<Message>> getMessages() {
+  Future<List<Message>> getMessages() async {
+    // final flaskMessage = await messagesAPIService.getLastMessageFlask();
+    // if (flaskMessage.isNotEmpty) {
+    //   Message newAnswer =
+    //       Message(userId: '1', message: flaskMessage.first.answer);
+    //   messagesAPIService.addMessage(newAnswer);
+    // }
+
     return messagesAPIService.getMessages();
   }
 
@@ -22,6 +30,12 @@ class MessagesRepository {
 
   Future<void> add(Message message) async {
     return messagesAPIService.addMessage(message);
+  }
+
+  Future<void> addFlaskMessage(Message message) async {
+    final answer = await messagesAPIService.addMessageFlask(message.message);
+    final Message answerMessage = Message(userId: '1', message: answer.answer);
+    return messagesAPIService.addMessage(answerMessage);
   }
 
   Future<void> deleteMessage(Message message) async {
