@@ -1,4 +1,3 @@
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plant_deseases_client/features/chatbot/service/message_service.dart';
 import 'package:plant_deseases_client/models/Message.dart';
